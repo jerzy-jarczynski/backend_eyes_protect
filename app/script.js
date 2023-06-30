@@ -25,16 +25,18 @@ class App extends React.Component {
             <p>This app will help you track your time and inform you when it's time to rest.</p>
           </div>
         )}
-        <img src="./images/Work.png" />
-        <img src="./images/Rest.png" />
-        <div className="timer">
-          18:23
-        </div>
-        <button className="btn">Start</button>
-        <button className="btn">Stop</button>
+        { status === 'work' && (<img src="./images/Work.png" />)}
+        { status === 'rest' && (<img src="./images/Rest.png" />)}
+        { status !== 'off' && (
+          <div className="timer">
+            18:23
+          </div>
+        )}
+        { status === 'off' && (<button className="btn">Start</button>)}
+        { status !== 'off' && (<button className="btn">Stop</button>)}
         <button className="btn btn-close">X</button>
       </div>
-    )
+    );
   }
 };
 
