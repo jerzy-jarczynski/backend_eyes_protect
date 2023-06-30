@@ -16,6 +16,14 @@ function main() {
 
   // load app/index.html as the window content
   mainWindow.loadFile(path.join('app', 'index.html'));
+
+  // Wait until the window is ready
+  mainWindow.webContents.on('dom-ready', () => {
+    // Enable dark theme for DevTools
+    mainWindow.webContents.openDevTools({
+      theme: 'dark'
+    });
+  });
 }
 
 app.on('ready', main);
