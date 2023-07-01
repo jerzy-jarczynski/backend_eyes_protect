@@ -12,6 +12,7 @@ class App extends React.Component {
     };
     this.memoizedFormatTime = this.memoize(this.formatTime);
     this.startTimer = this.startTimer.bind(this); // Bind the method to the component instance
+    this.stopTimer = this.stopTimer.bind(this); // Bind the stopTimer method
   }
 
   memoize(fn) {
@@ -43,7 +44,6 @@ class App extends React.Component {
           }), () => {
             if (this.state.time === 0) {
               this.setState((prevState) => ({ status: prevState.status === 'work' ? 'rest' : 'work', time: 5 }));
-              console.log(this.state.status);
             }
           });
         }, 1000),
@@ -58,12 +58,24 @@ class App extends React.Component {
           }), () => {
             if (this.state.time === 0) {
               this.setState({ status: 'work', time: 5 });
-              console.log(this.state.status);
             }
           });
         }, 1000),
       });
     }
+  }
+
+  stopTimer() {
+    clearInterval(this.state.timer); // Stop the interval timer
+    this.setState({
+      time: 0,
+      status: 'off',
+      timer: null,
+    });
+  }
+
+  closeApp() {
+    window.close();
   }
 
   render() {
@@ -89,8 +101,14 @@ class App extends React.Component {
             Start
           </button>
         )}
-        { status !== 'off' && (<button className="btn">Stop</button>)}
-        <button className="btn btn-close">X</button>
+        { status !== 'off' && (
+          <button className="btn" onClick={this.stopTimer}>
+            Stop
+          </button>
+        )}
+        <button className="btn btn-close" onClick={this.closeApp}>
+          X
+        </button>
       </div>
     );
   }
