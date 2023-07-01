@@ -6,10 +6,29 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: 'off',
-      time: 0,
+      status: 'on',
+      time: 961,
       timer: null,
     };
+    this.memoizedFormatTime = this.memoize(this.formatTime);
+  }
+
+  memoize(fn) {
+    const cache = {};
+    return function (seconds) {
+      if (cache[seconds]) {
+        return cache[seconds];
+      }
+      const result = fn.call(this, seconds);
+      cache[seconds] = result;
+      return result;
+    };
+  }  
+
+  formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const remainingSeconds = (seconds % 60).toString().padStart(2, '0');
+    return `${minutes}:${remainingSeconds}`;
   }
 
   render() {
@@ -28,9 +47,7 @@ class App extends React.Component {
         { status === 'work' && (<img src="./images/Work.png" />)}
         { status === 'rest' && (<img src="./images/Rest.png" />)}
         { status !== 'off' && (
-          <div className="timer">
-            18:23
-          </div>
+          <div className="timer">{this.memoizedFormatTime(time)}</div>
         )}
         { status === 'off' && (<button className="btn">Start</button>)}
         { status !== 'off' && (<button className="btn">Stop</button>)}
