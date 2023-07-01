@@ -33,15 +33,37 @@ class App extends React.Component {
   }
 
   startTimer() {
-    this.setState({
-      time: 1200,
-      status: 'work',
-      timer: setInterval(() => {
-        this.setState((prevState) => ({
-          time: prevState.time + 1,
-        }));
-      }, 1000),
-    });
+    if (this.state.status === 'off') {
+      this.setState({
+        time: 1200,
+        status: 'work',
+        timer: setInterval(() => {
+          this.setState((prevState) => ({
+            time: prevState.time - 1,
+          }), () => {
+            if (this.state.time === 0) {
+              this.setState((prevState) => ({ status: prevState.status === 'work' ? 'rest' : 'work', time: 5 }));
+              console.log(this.state.status);
+            }
+          });
+        }, 1000),
+      });
+    } else if (this.state.status === 'work' && this.state.time === 0) {
+      this.setState({
+        time: 20,
+        status: 'rest',
+        timer: setInterval(() => {
+          this.setState((prevState) => ({
+            time: prevState.time - 1,
+          }), () => {
+            if (this.state.time === 0) {
+              this.setState({ status: 'work', time: 5 });
+              console.log(this.state.status);
+            }
+          });
+        }, 1000),
+      });
+    }
   }
 
   render() {
