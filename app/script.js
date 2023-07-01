@@ -44,6 +44,7 @@ class App extends React.Component {
           }), () => {
             if (this.state.time === 0) {
               this.setState((prevState) => ({ status: prevState.status === 'work' ? 'rest' : 'work', time: 5 }));
+              this.playBell();
             }
           });
         }, 1000),
@@ -58,6 +59,7 @@ class App extends React.Component {
           }), () => {
             if (this.state.time === 0) {
               this.setState({ status: 'work', time: 5 });
+              this.playBell();
             }
           });
         }, 1000),
@@ -77,6 +79,11 @@ class App extends React.Component {
   closeApp() {
     window.close();
   }
+
+  playBell() {
+    const bell = new Audio('./sounds/bell.wav');
+    bell.play();
+  };  
 
   render() {
 
