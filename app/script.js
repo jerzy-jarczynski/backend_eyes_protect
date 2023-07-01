@@ -6,11 +6,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: 'on',
-      time: 961,
+      status: 'off',
+      time: 0,
       timer: null,
     };
     this.memoizedFormatTime = this.memoize(this.formatTime);
+    this.startTimer = this.startTimer.bind(this); // Bind the method to the component instance
   }
 
   memoize(fn) {
@@ -31,6 +32,18 @@ class App extends React.Component {
     return `${minutes}:${remainingSeconds}`;
   }
 
+  startTimer() {
+    this.setState({
+      time: 1200,
+      status: 'work',
+      timer: setInterval(() => {
+        this.setState((prevState) => ({
+          time: prevState.time + 1,
+        }));
+      }, 1000),
+    });
+  }
+
   render() {
 
     const { status, time, timer } = this.state;
@@ -49,7 +62,11 @@ class App extends React.Component {
         { status !== 'off' && (
           <div className="timer">{this.memoizedFormatTime(time)}</div>
         )}
-        { status === 'off' && (<button className="btn">Start</button>)}
+        { status === 'off' && (
+          <button className="btn" onClick={this.startTimer}>
+            Start
+          </button>
+        )}
         { status !== 'off' && (<button className="btn">Stop</button>)}
         <button className="btn btn-close">X</button>
       </div>
